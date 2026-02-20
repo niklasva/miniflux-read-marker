@@ -61,6 +61,11 @@ body {
   gap: 8px;
 }
 
+.entry-actions {
+  display: grid;
+  gap: 8px;
+}
+
 button {
   padding: 8px 14px;
   border-radius: 999px;
