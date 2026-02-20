@@ -40,7 +40,8 @@ async function getSettings() {
     debugEnabled: false,
     cacheMissesEnabled: true,
     autoMarkEnabled: true,
-    fallbackDepth: 10
+    fallbackDepth: 10,
+    blockedDomains: []
   });
   return {
     baseUrl: settings.baseUrl.trim(),
@@ -50,7 +51,10 @@ async function getSettings() {
     autoMarkEnabled: Boolean(settings.autoMarkEnabled),
     fallbackDepth: Number.isNaN(Number(settings.fallbackDepth))
       ? 10
-      : Number(settings.fallbackDepth)
+      : Number(settings.fallbackDepth),
+    blockedDomains: Array.isArray(settings.blockedDomains)
+      ? settings.blockedDomains.map((entry) => String(entry).toLowerCase())
+      : []
   };
 }
 
@@ -166,6 +170,13 @@ function getPathname(urlString) {
   } catch (err) {
     return "/";
   }
+}
+
+function isBlockedDomain(urlString, blockedDomains) {
+  if (!blockedDomains || blockedDomains.length === 0) return false;
+  const host = getHostKey(urlString);
+  if (!host) return false;
+  return blockedDomains.includes(host);
 }
 
 async function getFeeds(baseUrl, apiToken, debugEnabled) {
@@ -538,7 +549,15 @@ async function setActionState(tabId, state) {
 }
 
 async function checkTab(tabId, url) {
-  const { baseUrl, apiToken, debugEnabled, cacheMissesEnabled, autoMarkEnabled, fallbackDepth } =
+  const {
+    baseUrl,
+    apiToken,
+    debugEnabled,
+    cacheMissesEnabled,
+    autoMarkEnabled,
+    fallbackDepth,
+    blockedDomains
+  } =
     await getSettings();
 
   logDebug(debugEnabled, "Checking tab URL", { tabId, url });
@@ -552,6 +571,13 @@ async function checkTab(tabId, url) {
 
   if (!isHttpUrl(url)) {
     logDebug(debugEnabled, "URL is not http/https", url);
+    tabStates.delete(tabId);
+    await setActionState(tabId, "default");
+    return;
+  }
+
+  if (isBlockedDomain(url, blockedDomains)) {
+    logDebug(debugEnabled, "Domain is blocked", url);
     tabStates.delete(tabId);
     await setActionState(tabId, "default");
     return;
@@ -795,7 +821,8 @@ api.storage.onChanged.addListener(async (changes, areaName) => {
     !changes.apiToken &&
     !changes.cacheMissesEnabled &&
     !changes.fallbackDepth &&
-    !changes.autoMarkEnabled
+    !changes.autoMarkEnabled &&
+    !changes.blockedDomains
   )
     return;
 

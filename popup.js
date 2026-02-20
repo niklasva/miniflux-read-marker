@@ -16,10 +16,12 @@ const entryTitleEl = document.getElementById("entry-title");
 const entryUrlEl = document.getElementById("entry-url");
 const entryStatusEl = document.getElementById("entry-status");
 const markReadButton = document.getElementById("mark-read");
+const toggleDomainButton = document.getElementById("toggle-domain");
 const openSettingsButton = document.getElementById("open-settings");
 
 let currentTabId = null;
 let currentEntryId = null;
+let currentHost = null;
 
 function show(el) {
   el.classList.remove("hidden");
@@ -56,6 +58,14 @@ async function loadState() {
   }
 
   currentTabId = tab.id;
+  try {
+    const tabUrl = new URL(tab.url || "");
+    currentHost = tabUrl.hostname.replace(/^www\./i, "").toLowerCase();
+  } catch (err) {
+    currentHost = null;
+  }
+
+  await updateDomainToggle();
   const response = await api.runtime.sendMessage({
     type: "getTabState",
     tabId: tab.id
@@ -97,6 +107,37 @@ async function loadState() {
   show(entrySection);
   setEntry(entry, status || "read");
 }
+
+async function updateDomainToggle() {
+  if (!currentHost) {
+    toggleDomainButton.disabled = true;
+    toggleDomainButton.textContent = "Disable for domain";
+    return;
+  }
+  const settings = await api.storage.local.get({ blockedDomains: [] });
+  const blocked = Array.isArray(settings.blockedDomains)
+    ? settings.blockedDomains.map((entry) => String(entry).toLowerCase())
+    : [];
+  const isBlocked = blocked.includes(currentHost);
+  toggleDomainButton.disabled = false;
+  toggleDomainButton.textContent = isBlocked
+    ? `Enable for ${currentHost}`
+    : `Disable for ${currentHost}`;
+}
+
+toggleDomainButton.addEventListener("click", async () => {
+  if (!currentHost) return;
+  const settings = await api.storage.local.get({ blockedDomains: [] });
+  const blocked = Array.isArray(settings.blockedDomains)
+    ? settings.blockedDomains.map((entry) => String(entry).toLowerCase())
+    : [];
+  const isBlocked = blocked.includes(currentHost);
+  const next = isBlocked
+    ? blocked.filter((entry) => entry !== currentHost)
+    : blocked.concat(currentHost);
+  await api.storage.local.set({ blockedDomains: next });
+  await updateDomainToggle();
+});
 
 markReadButton.addEventListener("click", async () => {
   if (!currentEntryId || currentTabId === null) return;

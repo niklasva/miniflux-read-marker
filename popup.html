@@ -8,9 +8,14 @@
   </head>
   <body>
     <main class="popup">
-      <header>
-        <h1>Miniflux</h1>
-        <p id="subtitle">Checking current tab…</p>
+      <header class="header">
+        <div>
+          <h1>Miniflux</h1>
+          <p id="subtitle">Checking current tab…</p>
+        </div>
+        <button id="open-settings" type="button" class="link" aria-label="Settings">
+          Settings
+        </button>
       </header>
 
       <section id="entry" class="entry hidden">
@@ -28,8 +33,10 @@
       </section>
 
       <div class="actions">
-        <button id="mark-read" type="button" disabled>Mark Read</button>
-        <button id="open-settings" type="button" class="secondary">Settings</button>
+        <button id="mark-read" type="button" class="primary" disabled>Mark Read</button>
+        <button id="toggle-domain" type="button" class="secondary" disabled>
+          Disable for domain
+        </button>
       </div>
     </main>
 

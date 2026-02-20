@@ -13,12 +13,19 @@ body {
   padding: 18px;
 }
 
-header h1 {
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header h1 {
   margin: 0 0 6px;
   font-size: 18px;
 }
 
-header p {
+.header p {
   margin: 0 0 16px;
   font-size: 13px;
   color: #6b5a3c;
@@ -50,8 +57,7 @@ header p {
 }
 
 .actions {
-  display: flex;
-  justify-content: flex-end;
+  display: grid;
   gap: 8px;
 }
 
@@ -71,6 +77,15 @@ button[disabled] {
   cursor: default;
 }
 
+button.primary {
+  background: #7a5a2e;
+  color: #fff;
+}
+
+button.primary:hover {
+  background: #634523;
+}
+
 button.secondary {
   background: #eee4d2;
   color: #5a4a2c;
@@ -78,6 +93,21 @@ button.secondary {
 
 button.secondary:hover {
   background: #e2d5bf;
+}
+
+button.link {
+  border: none;
+  background: none;
+  color: #7a5a2e;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+button.link:hover {
+  color: #5a4a2c;
+  text-decoration: underline;
 }
 
 .hidden {
