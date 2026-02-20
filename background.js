@@ -206,7 +206,9 @@ function getCandidateFeedIds(feeds, pageUrl) {
     .map((feed) => {
       const siteUrl = feed.site_url || "";
       const host = getHostKey(siteUrl);
-      if (!host || host !== pageHost) return null;
+      if (!host) return null;
+      const hostMatches = pageHost === host || pageHost.endsWith(`.${host}`);
+      if (!hostMatches) return null;
       const feedPath = getPathname(siteUrl);
       const pathScore = pagePath.startsWith(feedPath) ? feedPath.length : 0;
       return { id: feed.id, pathScore };
