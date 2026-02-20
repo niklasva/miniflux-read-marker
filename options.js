@@ -13,6 +13,7 @@ const baseUrlInput = document.getElementById("base-url");
 const apiTokenInput = document.getElementById("api-token");
 const debugEnabledInput = document.getElementById("debug-enabled");
 const cacheMissesEnabledInput = document.getElementById("cache-misses-enabled");
+const autoMarkEnabledInput = document.getElementById("auto-mark-enabled");
 const fallbackDepthInput = document.getElementById("fallback-depth");
 const statusEl = document.getElementById("status");
 
@@ -33,6 +34,7 @@ async function loadSettings() {
     apiToken: "",
     debugEnabled: false,
     cacheMissesEnabled: true,
+    autoMarkEnabled: true,
     fallbackDepth: 10
   });
 
@@ -40,6 +42,7 @@ async function loadSettings() {
   apiTokenInput.value = settings.apiToken || "";
   debugEnabledInput.checked = Boolean(settings.debugEnabled);
   cacheMissesEnabledInput.checked = Boolean(settings.cacheMissesEnabled);
+  autoMarkEnabledInput.checked = Boolean(settings.autoMarkEnabled);
   fallbackDepthInput.value =
     settings.fallbackDepth === 0 ? "0" : String(settings.fallbackDepth || 10);
 }
@@ -51,6 +54,7 @@ form.addEventListener("submit", async (event) => {
   const apiToken = apiTokenInput.value.trim();
   const debugEnabled = debugEnabledInput.checked;
   const cacheMissesEnabled = cacheMissesEnabledInput.checked;
+  const autoMarkEnabled = autoMarkEnabledInput.checked;
   const fallbackDepth = Number.parseInt(fallbackDepthInput.value, 10);
 
   if (!baseUrl || !apiToken) {
@@ -64,6 +68,7 @@ form.addEventListener("submit", async (event) => {
       apiToken,
       debugEnabled,
       cacheMissesEnabled,
+      autoMarkEnabled,
       fallbackDepth: Number.isNaN(fallbackDepth) ? 10 : fallbackDepth
     });
     showStatus("Saved.");

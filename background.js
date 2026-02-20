@@ -39,6 +39,7 @@ async function getSettings() {
     apiToken: "",
     debugEnabled: false,
     cacheMissesEnabled: true,
+    autoMarkEnabled: true,
     fallbackDepth: 10
   });
   return {
@@ -46,6 +47,7 @@ async function getSettings() {
     apiToken: settings.apiToken.trim(),
     debugEnabled: Boolean(settings.debugEnabled),
     cacheMissesEnabled: Boolean(settings.cacheMissesEnabled),
+    autoMarkEnabled: Boolean(settings.autoMarkEnabled),
     fallbackDepth: Number.isNaN(Number(settings.fallbackDepth))
       ? 10
       : Number(settings.fallbackDepth)
@@ -536,7 +538,7 @@ async function setActionState(tabId, state) {
 }
 
 async function checkTab(tabId, url) {
-  const { baseUrl, apiToken, debugEnabled, cacheMissesEnabled, fallbackDepth } =
+  const { baseUrl, apiToken, debugEnabled, cacheMissesEnabled, autoMarkEnabled, fallbackDepth } =
     await getSettings();
 
   logDebug(debugEnabled, "Checking tab URL", { tabId, url });
@@ -584,7 +586,20 @@ async function checkTab(tabId, url) {
     );
     if (anyEntry) {
       logDebug(debugEnabled, "Found entry", anyEntry);
-      const status = anyEntry.status === "unread" ? "unread" : "read";
+      let status = anyEntry.status === "unread" ? "unread" : "read";
+      if (status === "unread" && autoMarkEnabled) {
+        const marked = await setEntryStatus(
+          normalizedBase,
+          apiToken,
+          anyEntry.id,
+          "read",
+          debugEnabled
+        );
+        if (marked) {
+          status = "read";
+          logDebug(debugEnabled, "Auto-marked entry as read", anyEntry.id);
+        }
+      }
       const state = { entry: anyEntry, status };
       tabStates.set(tabId, state);
       await setActionState(tabId, status === "unread" ? "unread" : "active");
@@ -612,7 +627,20 @@ async function checkTab(tabId, url) {
         );
         if (feedEntry) {
           logDebug(debugEnabled, "Found entry in feed", feedEntry);
-          const status = feedEntry.status === "unread" ? "unread" : "read";
+          let status = feedEntry.status === "unread" ? "unread" : "read";
+          if (status === "unread" && autoMarkEnabled) {
+            const marked = await setEntryStatus(
+              normalizedBase,
+              apiToken,
+              feedEntry.id,
+              "read",
+              debugEnabled
+            );
+            if (marked) {
+              status = "read";
+              logDebug(debugEnabled, "Auto-marked entry as read", feedEntry.id);
+            }
+          }
           const state = { entry: feedEntry, status };
           tabStates.set(tabId, state);
           await setActionState(tabId, status === "unread" ? "unread" : "active");
@@ -630,9 +658,23 @@ async function checkTab(tabId, url) {
         );
         if (feedUnread) {
           logDebug(debugEnabled, "Found unread entry in feed (fallback)", feedUnread);
-          const state = { entry: feedUnread, status: "unread" };
+          let status = "unread";
+          if (autoMarkEnabled) {
+            const marked = await setEntryStatus(
+              normalizedBase,
+              apiToken,
+              feedUnread.id,
+              "read",
+              debugEnabled
+            );
+            if (marked) {
+              status = "read";
+              logDebug(debugEnabled, "Auto-marked entry as read", feedUnread.id);
+            }
+          }
+          const state = { entry: feedUnread, status };
           tabStates.set(tabId, state);
-          await setActionState(tabId, "unread");
+          await setActionState(tabId, status === "unread" ? "unread" : "active");
           return;
         }
 
@@ -669,9 +711,23 @@ async function checkTab(tabId, url) {
     );
     if (fallbackUnread) {
       logDebug(debugEnabled, "Found unread entry (fallback)", fallbackUnread);
-      const state = { entry: fallbackUnread, status: "unread" };
+      let status = "unread";
+      if (autoMarkEnabled) {
+        const marked = await setEntryStatus(
+          normalizedBase,
+          apiToken,
+          fallbackUnread.id,
+          "read",
+          debugEnabled
+        );
+        if (marked) {
+          status = "read";
+          logDebug(debugEnabled, "Auto-marked entry as read", fallbackUnread.id);
+        }
+      }
+      const state = { entry: fallbackUnread, status };
       tabStates.set(tabId, state);
-      await setActionState(tabId, "unread");
+      await setActionState(tabId, status === "unread" ? "unread" : "active");
       return;
     }
 
@@ -738,7 +794,8 @@ api.storage.onChanged.addListener(async (changes, areaName) => {
     !changes.baseUrl &&
     !changes.apiToken &&
     !changes.cacheMissesEnabled &&
-    !changes.fallbackDepth
+    !changes.fallbackDepth &&
+    !changes.autoMarkEnabled
   )
     return;
 
