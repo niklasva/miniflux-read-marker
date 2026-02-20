@@ -16,6 +16,7 @@ const entryTitleEl = document.getElementById("entry-title");
 const entryUrlEl = document.getElementById("entry-url");
 const entryStatusEl = document.getElementById("entry-status");
 const markReadButton = document.getElementById("mark-read");
+const openSettingsButton = document.getElementById("open-settings");
 
 let currentTabId = null;
 let currentEntryId = null;
@@ -127,6 +128,12 @@ markReadButton.addEventListener("click", async () => {
   } catch (err) {
     markReadButton.textContent = "Mark Read";
     markReadButton.disabled = false;
+  }
+});
+
+openSettingsButton.addEventListener("click", () => {
+  if (api.runtime && typeof api.runtime.openOptionsPage === "function") {
+    api.runtime.openOptionsPage();
   }
 });
 

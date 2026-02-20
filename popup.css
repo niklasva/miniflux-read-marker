@@ -52,6 +52,7 @@ header p {
 .actions {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
 }
 
 button {
@@ -68,6 +69,15 @@ button {
 button[disabled] {
   background: #c6b38f;
   cursor: default;
+}
+
+button.secondary {
+  background: #eee4d2;
+  color: #5a4a2c;
+}
+
+button.secondary:hover {
+  background: #e2d5bf;
 }
 
 .hidden {
