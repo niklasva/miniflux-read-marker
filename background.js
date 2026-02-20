@@ -22,6 +22,8 @@ const pendingChecks = new Map();
 const tabStates = new Map();
 const urlCache = new Map();
 const SESSION_CACHE_TTL_MISS_MS = 5 * 60 * 1000;
+const feedCache = new Map();
+const FEED_CACHE_TTL_MS = 10 * 60 * 1000;
 
 function getBrowser() {
   if (typeof browser !== "undefined") return browser;
@@ -46,7 +48,7 @@ async function getSettings() {
     cacheMissesEnabled: Boolean(settings.cacheMissesEnabled),
     fallbackDepth: Number.isNaN(Number(settings.fallbackDepth))
       ? 10
-      : Math.max(1, Number(settings.fallbackDepth))
+      : Number(settings.fallbackDepth)
   };
 }
 
@@ -146,6 +148,61 @@ function matchesEntryUrl(entry, pageUrl) {
   return normalizedEntry === normalizedPage;
 }
 
+function getHostKey(urlString) {
+  try {
+    const url = new URL(urlString);
+    return url.hostname.replace(/^www\./i, "").toLowerCase();
+  } catch (err) {
+    return "";
+  }
+}
+
+function getPathname(urlString) {
+  try {
+    const url = new URL(urlString);
+    return url.pathname || "/";
+  } catch (err) {
+    return "/";
+  }
+}
+
+async function getFeeds(baseUrl, apiToken, debugEnabled) {
+  const cached = feedCache.get(baseUrl);
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached.feeds;
+  }
+
+  const response = await minifluxRequest(baseUrl, apiToken, "/v1/feeds", {}, debugEnabled);
+  if (!response.ok) {
+    throw new Error(`Feeds request failed with status ${response.status}`);
+  }
+  const feeds = await response.json();
+  if (!Array.isArray(feeds)) {
+    throw new Error("Feeds response is not an array");
+  }
+  feedCache.set(baseUrl, { feeds, expiresAt: Date.now() + FEED_CACHE_TTL_MS });
+  return feeds;
+}
+
+function getCandidateFeedIds(feeds, pageUrl) {
+  const pageHost = getHostKey(pageUrl);
+  if (!pageHost) return [];
+  const pagePath = getPathname(pageUrl);
+
+  return feeds
+    .map((feed) => {
+      const siteUrl = feed.site_url || "";
+      const host = getHostKey(siteUrl);
+      if (!host || host !== pageHost) return null;
+      const feedPath = getPathname(siteUrl);
+      const pathScore = pagePath.startsWith(feedPath) ? feedPath.length : 0;
+      return { id: feed.id, pathScore };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.pathScore - a.pathScore)
+    .map((item) => item.id);
+}
+
 function getCacheKey(url) {
   return normalizeEntryUrl(url);
 }
@@ -166,9 +223,12 @@ function setCachedState(url, state) {
   urlCache.set(key, { state, expiresAt: Date.now() + SESSION_CACHE_TTL_MISS_MS });
 }
 
+const SEARCH_LIMIT_GLOBAL = 20;
+const SEARCH_LIMIT_FEED = 50;
+
 async function searchEntriesWithServer(baseUrl, apiToken, status, pageUrl, debugEnabled) {
   const params = new URLSearchParams({
-    limit: "1",
+    limit: String(SEARCH_LIMIT_GLOBAL),
     search: pageUrl
   });
 
@@ -201,6 +261,49 @@ async function searchEntriesWithServer(baseUrl, apiToken, status, pageUrl, debug
   return entry || null;
 }
 
+async function searchEntriesWithServerInFeed(
+  baseUrl,
+  apiToken,
+  feedId,
+  status,
+  pageUrl,
+  debugEnabled
+) {
+  const params = new URLSearchParams({
+    limit: String(SEARCH_LIMIT_FEED),
+    search: pageUrl
+  });
+
+  if (status) {
+    params.set("status", status);
+  }
+
+  const response = await minifluxRequest(
+    baseUrl,
+    apiToken,
+    `/v1/feeds/${feedId}/entries?${params.toString()}`,
+    {},
+    debugEnabled
+  );
+
+  if (!response.ok) {
+    throw new Error(`Feed search request failed with status ${response.status}`);
+  }
+
+  const payload = await response.json();
+  if (!payload || !Array.isArray(payload.entries)) return null;
+
+  logDebug(debugEnabled, "Feed search results", {
+    feedId,
+    status,
+    count: payload.entries.length,
+    urls: payload.entries.map((item) => item.url)
+  });
+
+  const entry = payload.entries.find((item) => matchesEntryUrl(item, pageUrl));
+  return entry || null;
+}
+
 async function searchEntriesWithFallback(
   baseUrl,
   apiToken,
@@ -214,8 +317,9 @@ async function searchEntriesWithFallback(
   }
   let offset = 0;
 
-  const pageLimit = fallbackDepth || 1;
-  for (let page = 0; page < pageLimit; page += 1) {
+  const pageLimit = typeof fallbackDepth === "number" ? fallbackDepth : 1;
+  let page = 0;
+  while (pageLimit === 0 || page < pageLimit) {
     const params = new URLSearchParams({
       status,
       limit: String(FALLBACK_PAGE_SIZE),
@@ -252,6 +356,69 @@ async function searchEntriesWithFallback(
     if (payload.entries.length < FALLBACK_PAGE_SIZE) {
       return null;
     }
+
+    page += 1;
+  }
+
+  return null;
+}
+
+async function searchEntriesWithFallbackInFeed(
+  baseUrl,
+  apiToken,
+  feedId,
+  status,
+  pageUrl,
+  debugEnabled,
+  fallbackDepth
+) {
+  if (!status) {
+    return null;
+  }
+  let offset = 0;
+  const pageLimit = typeof fallbackDepth === "number" ? fallbackDepth : 1;
+  let page = 0;
+
+  while (pageLimit === 0 || page < pageLimit) {
+    const params = new URLSearchParams({
+      status,
+      limit: String(FALLBACK_PAGE_SIZE),
+      offset: String(offset)
+    });
+
+    const response = await minifluxRequest(
+      baseUrl,
+      apiToken,
+      `/v1/feeds/${feedId}/entries?${params.toString()}`,
+      {},
+      debugEnabled
+    );
+
+    if (!response.ok) {
+      throw new Error(`Feed list request failed with status ${response.status}`);
+    }
+
+    const payload = await response.json();
+    if (!payload || !Array.isArray(payload.entries) || payload.entries.length === 0) {
+      return null;
+    }
+
+    logDebug(debugEnabled, "Feed fallback page results", {
+      feedId,
+      status,
+      offset,
+      count: payload.entries.length
+    });
+
+    const entry = payload.entries.find((item) => matchesEntryUrl(item, pageUrl));
+    if (entry) return entry;
+
+    offset += payload.entries.length;
+    if (payload.entries.length < FALLBACK_PAGE_SIZE) {
+      return null;
+    }
+
+    page += 1;
   }
 
   return null;
@@ -275,6 +442,49 @@ async function findEntry(baseUrl, apiToken, status, pageUrl, debugEnabled, fallb
     return await searchEntriesWithFallback(
       baseUrl,
       apiToken,
+      status,
+      pageUrl,
+      debugEnabled,
+      fallbackDepth
+    );
+  }
+}
+
+async function findEntryInFeed(
+  baseUrl,
+  apiToken,
+  feedId,
+  status,
+  pageUrl,
+  debugEnabled,
+  fallbackDepth
+) {
+  try {
+    const entry = await searchEntriesWithServerInFeed(
+      baseUrl,
+      apiToken,
+      feedId,
+      status,
+      pageUrl,
+      debugEnabled
+    );
+    if (entry) return entry;
+    logDebug(debugEnabled, "Feed search returned no matches, falling back", { feedId, status });
+    return await searchEntriesWithFallbackInFeed(
+      baseUrl,
+      apiToken,
+      feedId,
+      status,
+      pageUrl,
+      debugEnabled,
+      fallbackDepth
+    );
+  } catch (err) {
+    logDebug(debugEnabled, "Feed search failed, falling back", err);
+    return await searchEntriesWithFallbackInFeed(
+      baseUrl,
+      apiToken,
+      feedId,
       status,
       pageUrl,
       debugEnabled,
@@ -381,7 +591,73 @@ async function checkTab(tabId, url) {
       return;
     }
 
-    logDebug(debugEnabled, "Search returned no matches, falling back to recent entries");
+    logDebug(debugEnabled, "Search returned no matches, trying feed-specific lookup");
+
+    try {
+      const feeds = await getFeeds(normalizedBase, apiToken, debugEnabled);
+      const feedIds = getCandidateFeedIds(feeds, url);
+      if (feedIds.length > 0) {
+        logDebug(debugEnabled, "Matched feed candidates", feedIds);
+      }
+
+      for (const feedId of feedIds) {
+        const feedEntry = await findEntryInFeed(
+          normalizedBase,
+          apiToken,
+          feedId,
+          null,
+          url,
+          debugEnabled,
+          fallbackDepth
+        );
+        if (feedEntry) {
+          logDebug(debugEnabled, "Found entry in feed", feedEntry);
+          const status = feedEntry.status === "unread" ? "unread" : "read";
+          const state = { entry: feedEntry, status };
+          tabStates.set(tabId, state);
+          await setActionState(tabId, status === "unread" ? "unread" : "active");
+          return;
+        }
+
+        const feedUnread = await findEntryInFeed(
+          normalizedBase,
+          apiToken,
+          feedId,
+          "unread",
+          url,
+          debugEnabled,
+          fallbackDepth
+        );
+        if (feedUnread) {
+          logDebug(debugEnabled, "Found unread entry in feed (fallback)", feedUnread);
+          const state = { entry: feedUnread, status: "unread" };
+          tabStates.set(tabId, state);
+          await setActionState(tabId, "unread");
+          return;
+        }
+
+        const feedRead = await findEntryInFeed(
+          normalizedBase,
+          apiToken,
+          feedId,
+          "read",
+          url,
+          debugEnabled,
+          fallbackDepth
+        );
+        if (feedRead) {
+          logDebug(debugEnabled, "Found read entry in feed (fallback)", feedRead);
+          const state = { entry: feedRead, status: "read" };
+          tabStates.set(tabId, state);
+          await setActionState(tabId, "active");
+          return;
+        }
+      }
+    } catch (err) {
+      logDebug(debugEnabled, "Feed lookup failed, falling back to global", err);
+    }
+
+    logDebug(debugEnabled, "Feed lookup failed to match, falling back to recent entries");
 
     const fallbackUnread = await findEntry(
       normalizedBase,
@@ -469,6 +745,7 @@ api.storage.onChanged.addListener(async (changes, areaName) => {
   const [tab] = await api.tabs.query({ active: true, currentWindow: true });
   if (!tab || !tab.url) return;
   urlCache.clear();
+  feedCache.clear();
   queueTabCheck(tab.id, tab.url);
 });
 

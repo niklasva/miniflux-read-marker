@@ -40,7 +40,8 @@ async function loadSettings() {
   apiTokenInput.value = settings.apiToken || "";
   debugEnabledInput.checked = Boolean(settings.debugEnabled);
   cacheMissesEnabledInput.checked = Boolean(settings.cacheMissesEnabled);
-  fallbackDepthInput.value = String(settings.fallbackDepth || 10);
+  fallbackDepthInput.value =
+    settings.fallbackDepth === 0 ? "0" : String(settings.fallbackDepth || 10);
 }
 
 form.addEventListener("submit", async (event) => {
