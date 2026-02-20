@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Miniflux Read Marker Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Miniflux Read Marker</h1>
+        <p>Connect your Miniflux instance so the extension can mark entries as read.</p>
+      </header>
+
+      <form id="settings-form">
+        <label>
+          Base URL
+          <input id="base-url" type="url" placeholder="https://miniflux.example.com/" required />
+          <span class="hint">Include the full protocol and optional path.</span>
+        </label>
+
+        <label>
+          API Token
+          <input id="api-token" type="password" placeholder="Paste your Miniflux API token" required />
+        </label>
+
+        <label class="checkbox">
+          <input id="debug-enabled" type="checkbox" />
+          <span>Enable debug logging</span>
+        </label>
+
+        <label class="checkbox">
+          <input id="cache-misses-enabled" type="checkbox" />
+          <span>Cache pages not found in Miniflux (5 min)</span>
+        </label>
+
+        <label>
+          Fallback scan depth (pages)
+          <select id="fallback-depth">
+            <option value="2">2 (fast)</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20 (slow)</option>
+          </select>
+          <span class="hint">Each page is 100 entries for read and unread scans.</span>
+        </label>
+
+        <div class="actions">
+          <button type="submit">Save</button>
+          <span id="status" role="status"></span>
+        </div>
+      </form>
+
+      <section class="note">
+        <h2>Where to find the token</h2>
+        <p>In Miniflux, open Settings → API Keys, then create a new token.</p>
+      </section>
+    </main>
+
+    <script src="options.js"></script>
+  </body>
+</html>

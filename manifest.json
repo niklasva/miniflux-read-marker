@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Miniflux Read Marker",
+  "version": "0.1.0",
+  "description": "Mark Miniflux entries as read when you open the matching page.",
+  "permissions": ["storage", "tabs", "<all_urls>"],
+  "browser_action": {
+    "default_title": "Miniflux Read Marker",
+    "default_icon": {
+      "16": "icons/icon-default.svg",
+      "32": "icons/icon-default.svg"
+    },
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "48": "icons/icon-default.svg",
+    "96": "icons/icon-default.svg"
+  }
+}

@@ -1,0 +1,75 @@
+:root {
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
+  color: #2b2b2b;
+}
+
+body {
+  margin: 0;
+  background: #f7f2e8;
+}
+
+.popup {
+  width: 320px;
+  padding: 18px;
+}
+
+header h1 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+header p {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #6b5a3c;
+}
+
+.entry h2 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.meta {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #6b5a3c;
+  word-break: break-word;
+}
+
+.status {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2a7a2e;
+}
+
+.empty {
+  font-size: 13px;
+  color: #6b5a3c;
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+  background: #7a5a2e;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button[disabled] {
+  background: #c6b38f;
+  cursor: default;
+}
+
+.hidden {
+  display: none;
+}

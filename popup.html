@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Miniflux Read Marker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header>
+        <h1>Miniflux</h1>
+        <p id="subtitle">Checking current tab…</p>
+      </header>
+
+      <section id="entry" class="entry hidden">
+        <h2 id="entry-title"></h2>
+        <p class="meta" id="entry-url"></p>
+        <p class="status" id="entry-status"></p>
+      </section>
+
+      <section id="empty" class="empty hidden">
+        <p>No matching Miniflux entry for this page.</p>
+      </section>
+
+      <section id="missing" class="empty hidden">
+        <p>Set your Base URL and API token in the extension settings.</p>
+      </section>
+
+      <div class="actions">
+        <button id="mark-read" type="button" disabled>Mark Read</button>
+      </div>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

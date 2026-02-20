@@ -1,0 +1,136 @@
+:root {
+  color-scheme: light;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
+  background: #f5f1e9;
+  color: #2b2b2b;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #f5f1e9 0%, #f0e5d3 45%, #e8ddc8 100%);
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+
+header h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+header p {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+form {
+  display: grid;
+  gap: 20px;
+  margin-top: 32px;
+  padding: 24px;
+  border-radius: 16px;
+  background: #fff9f2;
+  box-shadow: 0 10px 30px rgba(65, 48, 24, 0.12);
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  font-weight: 600;
+}
+
+label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+label.checkbox input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
+input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #c8b79b;
+  font-size: 15px;
+  background: #fff;
+}
+
+select {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #c8b79b;
+  font-size: 15px;
+  background: #fff;
+}
+
+input:focus {
+  outline: 2px solid #9f7a3d;
+  border-color: transparent;
+}
+
+.hint {
+  font-size: 13px;
+  color: #6b5a3c;
+  font-weight: 400;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background: #7a5a2e;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #634523;
+}
+
+.status {
+  font-size: 14px;
+  color: #2a7a2e;
+}
+
+.status.error {
+  color: #9b2d2d;
+}
+
+.note {
+  margin-top: 32px;
+  padding: 16px 20px;
+  border-left: 4px solid #c8b79b;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.note h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 32px 18px 48px;
+  }
+
+  form {
+    padding: 20px;
+  }
+}
