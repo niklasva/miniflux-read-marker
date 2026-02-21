@@ -104,6 +104,11 @@ button.secondary:hover {
   background: #e2d5bf;
 }
 
+button.small {
+  font-size: 11px;
+  padding: 6px 10px;
+}
+
 button.link {
   border: none;
   background: none;

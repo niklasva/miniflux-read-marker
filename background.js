@@ -550,17 +550,21 @@ async function setActionState(tabId, state) {
   await actionApi.setTitle({ tabId, title: "Miniflux Read Marker" });
 }
 
-async function checkTab(tabId, url) {
+async function checkTab(tabId, url, options = {}) {
   const {
     baseUrl,
     apiToken,
     debugEnabled,
     cacheMissesEnabled,
     autoMarkEnabled,
-    fallbackDepth,
+    fallbackDepth: configuredFallbackDepth,
     blockedDomains
   } =
     await getSettings();
+  const depth =
+    typeof options.fallbackDepthOverride === "number"
+      ? options.fallbackDepthOverride
+      : configuredFallbackDepth;
 
   logDebug(debugEnabled, "Checking tab URL", { tabId, url });
 
@@ -610,7 +614,7 @@ async function checkTab(tabId, url) {
       null,
       url,
       debugEnabled,
-      fallbackDepth
+      depth
     );
     if (anyEntry) {
       logDebug(debugEnabled, "Found entry", anyEntry);
@@ -651,7 +655,7 @@ async function checkTab(tabId, url) {
           null,
           url,
           debugEnabled,
-          fallbackDepth
+          depth
         );
         if (feedEntry) {
           logDebug(debugEnabled, "Found entry in feed", feedEntry);
@@ -682,7 +686,7 @@ async function checkTab(tabId, url) {
           "unread",
           url,
           debugEnabled,
-          fallbackDepth
+          depth
         );
         if (feedUnread) {
           logDebug(debugEnabled, "Found unread entry in feed (fallback)", feedUnread);
@@ -713,7 +717,7 @@ async function checkTab(tabId, url) {
           "read",
           url,
           debugEnabled,
-          fallbackDepth
+          depth
         );
         if (feedRead) {
           logDebug(debugEnabled, "Found read entry in feed (fallback)", feedRead);
@@ -735,7 +739,7 @@ async function checkTab(tabId, url) {
       "unread",
       url,
       debugEnabled,
-      fallbackDepth
+      depth
     );
     if (fallbackUnread) {
       logDebug(debugEnabled, "Found unread entry (fallback)", fallbackUnread);
@@ -765,7 +769,7 @@ async function checkTab(tabId, url) {
       "read",
       url,
       debugEnabled,
-      fallbackDepth
+      depth
     );
     if (fallbackRead) {
       logDebug(debugEnabled, "Found read entry (fallback)", fallbackRead);
@@ -875,6 +879,34 @@ api.runtime.onMessage.addListener((message, sender) => {
         return { ok: true };
       }
       return { ok: false, error: "Failed to mark read" };
+    })();
+  }
+
+  if (message.type === "forceRefresh") {
+    return (async () => {
+      const tabId = message.tabId;
+      if (typeof tabId !== "number") {
+        return { ok: false, error: "Invalid tab id" };
+      }
+
+      try {
+        const tab = await api.tabs.get(tabId);
+        if (!tab || !tab.url) {
+          tabStates.delete(tabId);
+          await setActionState(tabId, "default");
+          return { ok: false, error: "Tab URL unavailable" };
+        }
+
+        if (pendingChecks.has(tabId)) {
+          clearTimeout(pendingChecks.get(tabId));
+          pendingChecks.delete(tabId);
+        }
+
+        await checkTab(tabId, tab.url, { fallbackDepthOverride: 0 });
+        return { ok: true, state: tabStates.get(tabId) || null };
+      } catch (err) {
+        return { ok: false, error: String(err) };
+      }
     })();
   }
 

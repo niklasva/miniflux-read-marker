@@ -16,6 +16,7 @@ const entryTitleEl = document.getElementById("entry-title");
 const entryUrlEl = document.getElementById("entry-url");
 const entryStatusEl = document.getElementById("entry-status");
 const markReadButton = document.getElementById("mark-read");
+const forceRefreshButton = document.getElementById("force-refresh");
 const toggleDomainButton = document.getElementById("toggle-domain");
 const openSettingsButton = document.getElementById("open-settings");
 const actionsEl = document.querySelector(".actions");
@@ -54,6 +55,8 @@ function setEntry(entry, status) {
 }
 
 async function loadState() {
+  forceRefreshButton.disabled = true;
+  forceRefreshButton.classList.add("hidden");
   const [tab] = await api.tabs.query({ active: true, currentWindow: true });
   if (!tab) {
     setStatus("No active tab.");
@@ -67,6 +70,11 @@ async function loadState() {
   } catch (err) {
     currentHost = null;
   }
+  const debugSettings = await api.storage.local.get({ debugEnabled: false });
+  const showForceRefresh = Boolean(debugSettings.debugEnabled);
+  if (showForceRefresh) {
+    forceRefreshButton.classList.remove("hidden");
+  }
 
   await updateDomainToggle();
   if (entryActionsEl) {
@@ -79,8 +87,10 @@ async function loadState() {
     show(missingSection);
     markReadButton.disabled = true;
     markReadButton.textContent = "Mark Read";
+    forceRefreshButton.disabled = true;
     return;
   }
+  forceRefreshButton.disabled = !showForceRefresh;
   const response = await api.runtime.sendMessage({
     type: "getTabState",
     tabId: tab.id
@@ -158,6 +168,24 @@ toggleDomainButton.addEventListener("click", async () => {
   await api.storage.local.set({ blockedDomains: next });
   await updateDomainToggle();
   loadState();
+});
+
+forceRefreshButton.addEventListener("click", async () => {
+  if (currentTabId === null) return;
+  forceRefreshButton.disabled = true;
+  const originalText = forceRefreshButton.textContent;
+  forceRefreshButton.textContent = "Looking up…";
+  setStatus("Running full refresh…");
+
+  try {
+    await api.runtime.sendMessage({
+      type: "forceRefresh",
+      tabId: currentTabId
+    });
+  } finally {
+    forceRefreshButton.textContent = originalText;
+    await loadState();
+  }
 });
 
 markReadButton.addEventListener("click", async () => {
