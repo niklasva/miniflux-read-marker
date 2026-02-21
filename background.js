@@ -241,9 +241,27 @@ function setCachedState(url, state) {
 const SEARCH_LIMIT_GLOBAL = 20;
 const SEARCH_LIMIT_FEED = 50;
 
-async function searchEntriesWithServer(baseUrl, apiToken, status, pageUrl, debugEnabled) {
+function getEntriesPath(feedId) {
+  if (typeof feedId === "number") {
+    return `/v1/feeds/${feedId}/entries`;
+  }
+  return "/v1/entries";
+}
+
+function getSearchLimit(feedId) {
+  return typeof feedId === "number" ? SEARCH_LIMIT_FEED : SEARCH_LIMIT_GLOBAL;
+}
+
+async function searchEntriesWithServer(
+  baseUrl,
+  apiToken,
+  feedId,
+  status,
+  pageUrl,
+  debugEnabled
+) {
   const params = new URLSearchParams({
-    limit: String(SEARCH_LIMIT_GLOBAL),
+    limit: String(getSearchLimit(feedId)),
     search: pageUrl
   });
 
@@ -254,7 +272,7 @@ async function searchEntriesWithServer(baseUrl, apiToken, status, pageUrl, debug
   const response = await minifluxRequest(
     baseUrl,
     apiToken,
-    `/v1/entries?${params.toString()}`,
+    `${getEntriesPath(feedId)}?${params.toString()}`,
     {},
     debugEnabled
   );
@@ -266,49 +284,7 @@ async function searchEntriesWithServer(baseUrl, apiToken, status, pageUrl, debug
   const payload = await response.json();
   if (!payload || !Array.isArray(payload.entries)) return null;
 
-  logDebug(debugEnabled, "Search results", {
-    status,
-    count: payload.entries.length,
-    urls: payload.entries.map((item) => item.url)
-  });
-
-  const entry = payload.entries.find((item) => matchesEntryUrl(item, pageUrl));
-  return entry || null;
-}
-
-async function searchEntriesWithServerInFeed(
-  baseUrl,
-  apiToken,
-  feedId,
-  status,
-  pageUrl,
-  debugEnabled
-) {
-  const params = new URLSearchParams({
-    limit: String(SEARCH_LIMIT_FEED),
-    search: pageUrl
-  });
-
-  if (status) {
-    params.set("status", status);
-  }
-
-  const response = await minifluxRequest(
-    baseUrl,
-    apiToken,
-    `/v1/feeds/${feedId}/entries?${params.toString()}`,
-    {},
-    debugEnabled
-  );
-
-  if (!response.ok) {
-    throw new Error(`Feed search request failed with status ${response.status}`);
-  }
-
-  const payload = await response.json();
-  if (!payload || !Array.isArray(payload.entries)) return null;
-
-  logDebug(debugEnabled, "Feed search results", {
+  logDebug(debugEnabled, typeof feedId === "number" ? "Feed search results" : "Search results", {
     feedId,
     status,
     count: payload.entries.length,
@@ -322,6 +298,7 @@ async function searchEntriesWithServerInFeed(
 async function searchEntriesWithFallback(
   baseUrl,
   apiToken,
+  feedId,
   status,
   pageUrl,
   debugEnabled,
@@ -330,10 +307,11 @@ async function searchEntriesWithFallback(
   if (!status) {
     return null;
   }
-  let offset = 0;
 
+  let offset = 0;
   const pageLimit = typeof fallbackDepth === "number" ? fallbackDepth : 1;
   let page = 0;
+
   while (pageLimit === 0 || page < pageLimit) {
     const params = new URLSearchParams({
       status,
@@ -344,7 +322,7 @@ async function searchEntriesWithFallback(
     const response = await minifluxRequest(
       baseUrl,
       apiToken,
-      `/v1/entries?${params.toString()}`,
+      `${getEntriesPath(feedId)}?${params.toString()}`,
       {},
       debugEnabled
     );
@@ -358,11 +336,16 @@ async function searchEntriesWithFallback(
       return null;
     }
 
-    logDebug(debugEnabled, "Fallback page results", {
-      status,
-      offset,
-      count: payload.entries.length
-    });
+    logDebug(
+      debugEnabled,
+      typeof feedId === "number" ? "Feed fallback page results" : "Fallback page results",
+      {
+        feedId,
+        status,
+        offset,
+        count: payload.entries.length
+      }
+    );
 
     const entry = payload.entries.find((item) => matchesEntryUrl(item, pageUrl));
     if (entry) return entry;
@@ -378,104 +361,9 @@ async function searchEntriesWithFallback(
   return null;
 }
 
-async function searchEntriesWithFallbackInFeed(
-  baseUrl,
-  apiToken,
-  feedId,
-  status,
-  pageUrl,
-  debugEnabled,
-  fallbackDepth
-) {
-  if (!status) {
-    return null;
-  }
-  let offset = 0;
-  const pageLimit = typeof fallbackDepth === "number" ? fallbackDepth : 1;
-  let page = 0;
-
-  while (pageLimit === 0 || page < pageLimit) {
-    const params = new URLSearchParams({
-      status,
-      limit: String(FALLBACK_PAGE_SIZE),
-      offset: String(offset)
-    });
-
-    const response = await minifluxRequest(
-      baseUrl,
-      apiToken,
-      `/v1/feeds/${feedId}/entries?${params.toString()}`,
-      {},
-      debugEnabled
-    );
-
-    if (!response.ok) {
-      throw new Error(`Feed list request failed with status ${response.status}`);
-    }
-
-    const payload = await response.json();
-    if (!payload || !Array.isArray(payload.entries) || payload.entries.length === 0) {
-      return null;
-    }
-
-    logDebug(debugEnabled, "Feed fallback page results", {
-      feedId,
-      status,
-      offset,
-      count: payload.entries.length
-    });
-
-    const entry = payload.entries.find((item) => matchesEntryUrl(item, pageUrl));
-    if (entry) return entry;
-
-    offset += payload.entries.length;
-    if (payload.entries.length < FALLBACK_PAGE_SIZE) {
-      return null;
-    }
-
-    page += 1;
-  }
-
-  return null;
-}
-
-async function findEntry(baseUrl, apiToken, status, pageUrl, debugEnabled, fallbackDepth) {
+async function findEntry(baseUrl, apiToken, feedId, status, pageUrl, debugEnabled, fallbackDepth) {
   try {
-    const entry = await searchEntriesWithServer(baseUrl, apiToken, status, pageUrl, debugEnabled);
-    if (entry) return entry;
-    logDebug(debugEnabled, "Search returned no matches, falling back");
-    return await searchEntriesWithFallback(
-      baseUrl,
-      apiToken,
-      status,
-      pageUrl,
-      debugEnabled,
-      fallbackDepth
-    );
-  } catch (err) {
-    logDebug(debugEnabled, "Search failed, falling back", err);
-    return await searchEntriesWithFallback(
-      baseUrl,
-      apiToken,
-      status,
-      pageUrl,
-      debugEnabled,
-      fallbackDepth
-    );
-  }
-}
-
-async function findEntryInFeed(
-  baseUrl,
-  apiToken,
-  feedId,
-  status,
-  pageUrl,
-  debugEnabled,
-  fallbackDepth
-) {
-  try {
-    const entry = await searchEntriesWithServerInFeed(
+    const entry = await searchEntriesWithServer(
       baseUrl,
       apiToken,
       feedId,
@@ -484,8 +372,8 @@ async function findEntryInFeed(
       debugEnabled
     );
     if (entry) return entry;
-    logDebug(debugEnabled, "Feed search returned no matches, falling back", { feedId, status });
-    return await searchEntriesWithFallbackInFeed(
+    logDebug(debugEnabled, "Search returned no matches, falling back", { feedId, status });
+    return await searchEntriesWithFallback(
       baseUrl,
       apiToken,
       feedId,
@@ -495,8 +383,8 @@ async function findEntryInFeed(
       fallbackDepth
     );
   } catch (err) {
-    logDebug(debugEnabled, "Feed search failed, falling back", err);
-    return await searchEntriesWithFallbackInFeed(
+    logDebug(debugEnabled, "Search failed, falling back", err);
+    return await searchEntriesWithFallback(
       baseUrl,
       apiToken,
       feedId,
@@ -550,6 +438,90 @@ async function setActionState(tabId, state) {
   await actionApi.setTitle({ tabId, title: "Miniflux Read Marker" });
 }
 
+async function resetTabState(tabId, url, cacheMissesEnabled) {
+  tabStates.delete(tabId);
+  if (cacheMissesEnabled && url) {
+    setCachedState(url, "miss");
+  }
+  await setActionState(tabId, "default");
+}
+
+async function applyMatchedEntryState(
+  tabId,
+  entry,
+  normalizedBase,
+  apiToken,
+  autoMarkEnabled,
+  debugEnabled
+) {
+  let status = entry.status === "unread" ? "unread" : "read";
+  if (status === "unread" && autoMarkEnabled) {
+    const marked = await setEntryStatus(normalizedBase, apiToken, entry.id, "read", debugEnabled);
+    if (marked) {
+      status = "read";
+      logDebug(debugEnabled, "Auto-marked entry as read", entry.id);
+    }
+  }
+
+  tabStates.set(tabId, { entry, status });
+  await setActionState(tabId, status === "unread" ? "unread" : "active");
+}
+
+async function findEntryByStatuses(
+  normalizedBase,
+  apiToken,
+  feedId,
+  statuses,
+  url,
+  debugEnabled,
+  depth
+) {
+  for (const status of statuses) {
+    const entry = await findEntry(
+      normalizedBase,
+      apiToken,
+      feedId,
+      status,
+      url,
+      debugEnabled,
+      depth
+    );
+    if (entry) {
+      return entry;
+    }
+  }
+  return null;
+}
+
+async function findEntryInFeedCandidates(normalizedBase, apiToken, url, debugEnabled, depth) {
+  try {
+    const feeds = await getFeeds(normalizedBase, apiToken, debugEnabled);
+    const feedIds = getCandidateFeedIds(feeds, url);
+    if (feedIds.length > 0) {
+      logDebug(debugEnabled, "Matched feed candidates", feedIds);
+    }
+
+    for (const feedId of feedIds) {
+      const entry = await findEntryByStatuses(
+        normalizedBase,
+        apiToken,
+        feedId,
+        [null, "unread", "read"],
+        url,
+        debugEnabled,
+        depth
+      );
+      if (entry) {
+        return entry;
+      }
+    }
+  } catch (err) {
+    logDebug(debugEnabled, "Feed lookup failed, falling back to global", err);
+  }
+
+  return null;
+}
+
 async function checkTab(tabId, url, options = {}) {
   const {
     baseUrl,
@@ -559,8 +531,8 @@ async function checkTab(tabId, url, options = {}) {
     autoMarkEnabled,
     fallbackDepth: configuredFallbackDepth,
     blockedDomains
-  } =
-    await getSettings();
+  } = await getSettings();
+
   const depth =
     typeof options.fallbackDepthOverride === "number"
       ? options.fallbackDepthOverride
@@ -570,225 +542,107 @@ async function checkTab(tabId, url, options = {}) {
 
   if (!baseUrl || !apiToken) {
     logDebug(debugEnabled, "Missing base URL or API token");
-    tabStates.delete(tabId);
-    await setActionState(tabId, "default");
+    await resetTabState(tabId);
     return;
   }
 
   if (!isHttpUrl(url)) {
     logDebug(debugEnabled, "URL is not http/https", url);
-    tabStates.delete(tabId);
-    await setActionState(tabId, "default");
+    await resetTabState(tabId);
     return;
   }
 
   if (isBlockedDomain(url, blockedDomains)) {
     logDebug(debugEnabled, "Domain is blocked", url);
-    tabStates.delete(tabId);
-    await setActionState(tabId, "default");
+    await resetTabState(tabId);
     return;
   }
 
-  if (cacheMissesEnabled) {
-    const cachedState = getCachedState(url);
-    if (cachedState === "miss") {
-      logDebug(debugEnabled, "Using cached miss");
-      tabStates.delete(tabId);
-      await setActionState(tabId, "default");
-      return;
-    }
+  if (cacheMissesEnabled && getCachedState(url) === "miss") {
+    logDebug(debugEnabled, "Using cached miss");
+    await resetTabState(tabId);
+    return;
   }
 
   const normalizedBase = normalizeBaseUrl(baseUrl);
   if (!normalizedBase) {
     logDebug(debugEnabled, "Base URL is invalid", baseUrl);
-    tabStates.delete(tabId);
-    await setActionState(tabId, "default");
+    await resetTabState(tabId);
     return;
   }
 
   try {
-    const anyEntry = await findEntry(
+    const anyEntry = await findEntryByStatuses(
       normalizedBase,
       apiToken,
       null,
+      [null],
       url,
       debugEnabled,
       depth
     );
     if (anyEntry) {
       logDebug(debugEnabled, "Found entry", anyEntry);
-      let status = anyEntry.status === "unread" ? "unread" : "read";
-      if (status === "unread" && autoMarkEnabled) {
-        const marked = await setEntryStatus(
-          normalizedBase,
-          apiToken,
-          anyEntry.id,
-          "read",
-          debugEnabled
-        );
-        if (marked) {
-          status = "read";
-          logDebug(debugEnabled, "Auto-marked entry as read", anyEntry.id);
-        }
-      }
-      const state = { entry: anyEntry, status };
-      tabStates.set(tabId, state);
-      await setActionState(tabId, status === "unread" ? "unread" : "active");
+      await applyMatchedEntryState(
+        tabId,
+        anyEntry,
+        normalizedBase,
+        apiToken,
+        autoMarkEnabled,
+        debugEnabled
+      );
       return;
     }
 
     logDebug(debugEnabled, "Search returned no matches, trying feed-specific lookup");
-
-    try {
-      const feeds = await getFeeds(normalizedBase, apiToken, debugEnabled);
-      const feedIds = getCandidateFeedIds(feeds, url);
-      if (feedIds.length > 0) {
-        logDebug(debugEnabled, "Matched feed candidates", feedIds);
-      }
-
-      for (const feedId of feedIds) {
-        const feedEntry = await findEntryInFeed(
-          normalizedBase,
-          apiToken,
-          feedId,
-          null,
-          url,
-          debugEnabled,
-          depth
-        );
-        if (feedEntry) {
-          logDebug(debugEnabled, "Found entry in feed", feedEntry);
-          let status = feedEntry.status === "unread" ? "unread" : "read";
-          if (status === "unread" && autoMarkEnabled) {
-            const marked = await setEntryStatus(
-              normalizedBase,
-              apiToken,
-              feedEntry.id,
-              "read",
-              debugEnabled
-            );
-            if (marked) {
-              status = "read";
-              logDebug(debugEnabled, "Auto-marked entry as read", feedEntry.id);
-            }
-          }
-          const state = { entry: feedEntry, status };
-          tabStates.set(tabId, state);
-          await setActionState(tabId, status === "unread" ? "unread" : "active");
-          return;
-        }
-
-        const feedUnread = await findEntryInFeed(
-          normalizedBase,
-          apiToken,
-          feedId,
-          "unread",
-          url,
-          debugEnabled,
-          depth
-        );
-        if (feedUnread) {
-          logDebug(debugEnabled, "Found unread entry in feed (fallback)", feedUnread);
-          let status = "unread";
-          if (autoMarkEnabled) {
-            const marked = await setEntryStatus(
-              normalizedBase,
-              apiToken,
-              feedUnread.id,
-              "read",
-              debugEnabled
-            );
-            if (marked) {
-              status = "read";
-              logDebug(debugEnabled, "Auto-marked entry as read", feedUnread.id);
-            }
-          }
-          const state = { entry: feedUnread, status };
-          tabStates.set(tabId, state);
-          await setActionState(tabId, status === "unread" ? "unread" : "active");
-          return;
-        }
-
-        const feedRead = await findEntryInFeed(
-          normalizedBase,
-          apiToken,
-          feedId,
-          "read",
-          url,
-          debugEnabled,
-          depth
-        );
-        if (feedRead) {
-          logDebug(debugEnabled, "Found read entry in feed (fallback)", feedRead);
-          const state = { entry: feedRead, status: "read" };
-          tabStates.set(tabId, state);
-          await setActionState(tabId, "active");
-          return;
-        }
-      }
-    } catch (err) {
-      logDebug(debugEnabled, "Feed lookup failed, falling back to global", err);
-    }
-
-    logDebug(debugEnabled, "Feed lookup failed to match, falling back to recent entries");
-
-    const fallbackUnread = await findEntry(
+    const feedEntry = await findEntryInFeedCandidates(
       normalizedBase,
       apiToken,
-      "unread",
       url,
       debugEnabled,
       depth
     );
-    if (fallbackUnread) {
-      logDebug(debugEnabled, "Found unread entry (fallback)", fallbackUnread);
-      let status = "unread";
-      if (autoMarkEnabled) {
-        const marked = await setEntryStatus(
-          normalizedBase,
-          apiToken,
-          fallbackUnread.id,
-          "read",
-          debugEnabled
-        );
-        if (marked) {
-          status = "read";
-          logDebug(debugEnabled, "Auto-marked entry as read", fallbackUnread.id);
-        }
-      }
-      const state = { entry: fallbackUnread, status };
-      tabStates.set(tabId, state);
-      await setActionState(tabId, status === "unread" ? "unread" : "active");
+    if (feedEntry) {
+      logDebug(debugEnabled, "Found entry in feed", feedEntry);
+      await applyMatchedEntryState(
+        tabId,
+        feedEntry,
+        normalizedBase,
+        apiToken,
+        autoMarkEnabled,
+        debugEnabled
+      );
       return;
     }
 
-    const fallbackRead = await findEntry(
+    logDebug(debugEnabled, "Feed lookup failed to match, falling back to recent entries");
+    const fallbackEntry = await findEntryByStatuses(
       normalizedBase,
       apiToken,
-      "read",
+      null,
+      ["unread", "read"],
       url,
       debugEnabled,
       depth
     );
-    if (fallbackRead) {
-      logDebug(debugEnabled, "Found read entry (fallback)", fallbackRead);
-      const state = { entry: fallbackRead, status: "read" };
-      tabStates.set(tabId, state);
-      await setActionState(tabId, "active");
+    if (fallbackEntry) {
+      logDebug(debugEnabled, "Found entry (fallback)", fallbackEntry);
+      await applyMatchedEntryState(
+        tabId,
+        fallbackEntry,
+        normalizedBase,
+        apiToken,
+        autoMarkEnabled,
+        debugEnabled
+      );
       return;
     }
   } catch (err) {
     logDebug(debugEnabled, "Miniflux API error", err);
   }
 
-  tabStates.delete(tabId);
-  if (cacheMissesEnabled) {
-    setCachedState(url, "miss");
-  }
-  await setActionState(tabId, "default");
+  await resetTabState(tabId, url, cacheMissesEnabled);
 }
-
 function queueTabCheck(tabId, url) {
   if (!tabId || !url) return;
 
