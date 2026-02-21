@@ -19,6 +19,14 @@
     "page": "options.html",
     "open_in_tab": true
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "miniflux-read-marker@niklasva.github",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
   "icons": {
     "48": "icons/icon-default.svg",
     "96": "icons/icon-default.svg"

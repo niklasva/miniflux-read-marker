@@ -199,4 +199,7 @@ openSettingsButton.addEventListener("click", () => {
   }
 });
 
-loadState();
+window.addEventListener("load", () => {
+  document.body.classList.remove("preload");
+  loadState();
+});

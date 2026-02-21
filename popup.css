@@ -8,6 +8,10 @@ body {
   background: #f7f2e8;
 }
 
+body.preload .popup {
+  visibility: hidden;
+}
+
 .popup {
   width: 320px;
   padding: 18px;
