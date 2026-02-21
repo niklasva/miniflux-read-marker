@@ -19,7 +19,6 @@ const markReadButton = document.getElementById("mark-read");
 const forceRefreshButton = document.getElementById("force-refresh");
 const toggleDomainButton = document.getElementById("toggle-domain");
 const openSettingsButton = document.getElementById("open-settings");
-const actionsEl = document.querySelector(".actions");
 const entryActionsEl = document.getElementById("entry-actions");
 
 let currentTabId = null;
@@ -39,19 +38,54 @@ function setStatus(text) {
   subtitleEl.textContent = text;
 }
 
+function setMarkReadButton(status) {
+  markReadButton.disabled = false;
+  markReadButton.textContent = status === "read" ? "Mark Unread" : "Mark Read";
+}
+
+function disableMarkReadButton() {
+  currentEntryId = null;
+  markReadButton.disabled = true;
+  markReadButton.textContent = "Mark Read";
+}
+
+function showEntryActions(visible) {
+  if (!entryActionsEl) return;
+  entryActionsEl.style.display = visible ? "grid" : "none";
+}
+
+function showStateSection(section) {
+  hide(entrySection);
+  hide(emptySection);
+  hide(missingSection);
+  show(section);
+}
+
+function showNonMatchState(statusText, section) {
+  setStatus(statusText);
+  showStateSection(section);
+  showEntryActions(false);
+  disableMarkReadButton();
+}
+
+async function getBlockedDomains() {
+  const settings = await api.storage.local.get({ blockedDomains: [] });
+  if (!Array.isArray(settings.blockedDomains)) {
+    return [];
+  }
+
+  return settings.blockedDomains
+    .map((entry) => String(entry).trim().toLowerCase())
+    .filter((entry) => entry.length > 0);
+}
+
 function setEntry(entry, status) {
   entryTitleEl.textContent = entry.title || "(Untitled entry)";
   entryUrlEl.textContent = entry.url || "";
   entryStatusEl.textContent = status === "read" ? "Status: read" : "Status: unread";
 
   currentEntryId = entry.id;
-  if (status === "read") {
-    markReadButton.disabled = false;
-    markReadButton.textContent = "Mark Unread";
-  } else {
-    markReadButton.disabled = false;
-    markReadButton.textContent = "Mark Read";
-  }
+  setMarkReadButton(status);
 }
 
 async function loadState() {
@@ -77,19 +111,13 @@ async function loadState() {
   }
 
   await updateDomainToggle();
-  if (entryActionsEl) {
-    entryActionsEl.style.display = "none";
-  }
+  showEntryActions(false);
   if (isBlockedHost) {
-    setStatus("Disabled for this domain.");
-    hide(entrySection);
-    hide(emptySection);
-    show(missingSection);
-    markReadButton.disabled = true;
-    markReadButton.textContent = "Mark Read";
+    showNonMatchState("Disabled for this domain.", missingSection);
     forceRefreshButton.disabled = true;
     return;
   }
+
   forceRefreshButton.disabled = !showForceRefresh;
   const response = await api.runtime.sendMessage({
     type: "getTabState",
@@ -97,42 +125,24 @@ async function loadState() {
   });
 
   if (!response || response.missingSettings) {
-    setStatus("Missing settings.");
-    hide(entrySection);
-    hide(emptySection);
-    show(missingSection);
-    markReadButton.disabled = true;
-    markReadButton.textContent = "Mark Read";
+    showNonMatchState("Missing settings.", missingSection);
     return;
   }
 
   if (!response.state) {
-    setStatus("No match found.");
-    hide(entrySection);
-    hide(missingSection);
-    show(emptySection);
-    markReadButton.disabled = true;
-    markReadButton.textContent = "Mark Read";
+    showNonMatchState("No match found.", emptySection);
     return;
   }
 
   const { entry, status } = response.state;
   if (!entry) {
-    setStatus("No match found.");
-    hide(entrySection);
-    hide(missingSection);
-    show(emptySection);
-    markReadButton.disabled = true;
+    showNonMatchState("No match found.", emptySection);
     return;
   }
 
   setStatus("Match found.");
-  hide(emptySection);
-  hide(missingSection);
-  show(entrySection);
-  if (entryActionsEl) {
-    entryActionsEl.style.display = "grid";
-  }
+  showStateSection(entrySection);
+  showEntryActions(true);
   setEntry(entry, status || "read");
 }
 
@@ -143,10 +153,7 @@ async function updateDomainToggle() {
     isBlockedHost = false;
     return;
   }
-  const settings = await api.storage.local.get({ blockedDomains: [] });
-  const blocked = Array.isArray(settings.blockedDomains)
-    ? settings.blockedDomains.map((entry) => String(entry).toLowerCase())
-    : [];
+  const blocked = await getBlockedDomains();
   const isBlocked = blocked.includes(currentHost);
   isBlockedHost = isBlocked;
   toggleDomainButton.disabled = false;
@@ -157,10 +164,7 @@ async function updateDomainToggle() {
 
 toggleDomainButton.addEventListener("click", async () => {
   if (!currentHost) return;
-  const settings = await api.storage.local.get({ blockedDomains: [] });
-  const blocked = Array.isArray(settings.blockedDomains)
-    ? settings.blockedDomains.map((entry) => String(entry).toLowerCase())
-    : [];
+  const blocked = await getBlockedDomains();
   const isBlocked = blocked.includes(currentHost);
   const next = isBlocked
     ? blocked.filter((entry) => entry !== currentHost)
@@ -207,17 +211,13 @@ markReadButton.addEventListener("click", async () => {
     if (response && response.ok) {
       entryStatusEl.textContent =
         desiredStatus === "read" ? "Status: read" : "Status: unread";
-      markReadButton.textContent =
-        desiredStatus === "read" ? "Mark Unread" : "Mark Read";
-      markReadButton.disabled = false;
+      setMarkReadButton(desiredStatus);
       return;
     }
 
-    markReadButton.textContent = "Mark Read";
-    markReadButton.disabled = false;
+    setMarkReadButton("unread");
   } catch (err) {
-    markReadButton.textContent = "Mark Read";
-    markReadButton.disabled = false;
+    setMarkReadButton("unread");
   }
 });
 
