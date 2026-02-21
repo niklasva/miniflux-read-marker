@@ -806,11 +806,7 @@ api.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   queueTabCheck(tabId, tab.url);
 });
 
-api.tabs.onActivated.addListener(async (activeInfo) => {
-  const tab = await api.tabs.get(activeInfo.tabId);
-  if (!tab || !tab.url) return;
-  queueTabCheck(activeInfo.tabId, tab.url);
-});
+// Only check on page load/refresh (onUpdated with status "complete").
 
 api.tabs.onRemoved.addListener((tabId) => {
   tabStates.delete(tabId);
