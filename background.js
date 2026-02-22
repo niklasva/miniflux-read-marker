@@ -574,29 +574,29 @@ async function checkTab(tabId, url, options = {}) {
   }
 
   try {
-    const anyEntry = await findEntryByStatuses(
-      normalizedBase,
-      apiToken,
-      null,
-      [null],
-      url,
-      debugEnabled,
-      depth
-    );
-    if (anyEntry) {
-      logDebug(debugEnabled, "Found entry", anyEntry);
-      await applyMatchedEntryState(
-        tabId,
-        anyEntry,
-        normalizedBase,
-        apiToken,
-        autoMarkEnabled,
-        debugEnabled
-      );
-      return;
-    }
+    // const anyEntry = await findEntryByStatuses(
+    //   normalizedBase,
+    //   apiToken,
+    //   null,
+    //   [null],
+    //   url,
+    //   debugEnabled,
+    //   depth
+    // );
+    // if (anyEntry) {
+    //   logDebug(debugEnabled, "Found entry", anyEntry);
+    //   await applyMatchedEntryState(
+    //     tabId,
+    //     anyEntry,
+    //     normalizedBase,
+    //     apiToken,
+    //     autoMarkEnabled,
+    //     debugEnabled
+    //   );
+    //   return;
+    // }
 
-    logDebug(debugEnabled, "Search returned no matches, trying feed-specific lookup");
+    // logDebug(debugEnabled, "Search returned no matches, trying feed-specific lookup");
     const feedLookup = await findEntryInFeedCandidates(
       normalizedBase,
       apiToken,
