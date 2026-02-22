@@ -137,11 +137,7 @@ function normalizeEntryUrl(value) {
       pathname = pathname.replace(/\/+$/, "");
     }
     const hostname = url.hostname.replace(/^www\./i, "");
-    const isDefaultPort =
-      (url.protocol === "http:" && url.port === "80") ||
-      (url.protocol === "https:" && url.port === "443");
-    const portSuffix = url.port && !isDefaultPort ? `:${url.port}` : "";
-    return `${hostname}${portSuffix}${pathname}`;
+    return `${hostname}${pathname}`;
   } catch (err) {
     return value;
   }
