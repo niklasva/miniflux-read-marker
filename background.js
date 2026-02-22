@@ -443,6 +443,18 @@ async function setActionState(tabId, state) {
   await actionApi.setTitle({ tabId, title: "Miniflux Read Marker" });
 }
 
+async function showReadToast(tabId, debugEnabled) {
+  if (typeof tabId !== "number") return;
+  try {
+    await api.tabs.sendMessage(tabId, {
+      type: "showToast",
+      text: "Marked as read in Miniflux"
+    });
+  } catch (err) {
+    logDebug(debugEnabled, "Toast not shown for tab", { tabId, err: String(err) });
+  }
+}
+
 async function resetTabState(tabId, url, cacheMissesEnabled) {
   tabStates.delete(tabId);
   if (cacheMissesEnabled && url) {
@@ -464,6 +476,7 @@ async function applyMatchedEntryState(
     const marked = await setEntryStatus(normalizedBase, apiToken, entry.id, "read", debugEnabled);
     if (marked) {
       status = "read";
+      await showReadToast(tabId, debugEnabled);
       logDebug(debugEnabled, "Auto-marked entry as read", entry.id);
     }
   }
@@ -748,6 +761,9 @@ api.runtime.onMessage.addListener((message, sender) => {
         if (existing && existing.entry && existing.entry.id === entryId) {
           tabStates.set(tabId, { entry: existing.entry, status: targetStatus });
         }
+        if (targetStatus === "read") {
+          await showReadToast(tabId, debugEnabled);
+        }
         await setActionState(tabId, targetStatus === "unread" ? "unread" : "active");
         return { ok: true };
       }
@@ -777,6 +793,26 @@ api.runtime.onMessage.addListener((message, sender) => {
 
         await checkTab(tabId, tab.url, { fallbackDepthOverride: 0 });
         return { ok: true, state: tabStates.get(tabId) || null };
+      } catch (err) {
+        return { ok: false, error: String(err) };
+      }
+    })();
+  }
+
+  if (message.type === "openActionPopup") {
+    return (async () => {
+      const actionApi = api.action || api.browserAction;
+      if (!actionApi || typeof actionApi.openPopup !== "function") {
+        return { ok: false, error: "Popup API unavailable" };
+      }
+
+      try {
+        if (sender && sender.tab && typeof sender.tab.windowId === "number") {
+          await actionApi.openPopup({ windowId: sender.tab.windowId });
+        } else {
+          await actionApi.openPopup();
+        }
+        return { ok: true };
       } catch (err) {
         return { ok: false, error: String(err) };
       }

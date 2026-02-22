@@ -1,0 +1,989 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		85B7AE432F4B9B1B00D73BDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7AE422F4B9B1B00D73BDE /* AppDelegate.swift */; };
+		85B7AE452F4B9B1B00D73BDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7AE442F4B9B1B00D73BDE /* SceneDelegate.swift */; };
+		85B7AE482F4B9B1B00D73BDE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE462F4B9B1B00D73BDE /* LaunchScreen.storyboard */; };
+		85B7AE4B2F4B9B1B00D73BDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE492F4B9B1B00D73BDE /* Main.storyboard */; };
+		85B7AE542F4B9B1B00D73BDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7AE532F4B9B1B00D73BDE /* AppDelegate.swift */; };
+		85B7AE572F4B9B1B00D73BDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE552F4B9B1B00D73BDE /* Main.storyboard */; };
+		85B7AE5F2F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85B7AE5E2F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		85B7AE692F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 85B7AE682F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		85B7AE6F2F4B9B1B00D73BDE /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE322F4B9B1A00D73BDE /* Main.html */; };
+		85B7AE702F4B9B1B00D73BDE /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE322F4B9B1A00D73BDE /* Main.html */; };
+		85B7AE772F4B9B1B00D73BDE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7AE372F4B9B1A00D73BDE /* ViewController.swift */; };
+		85B7AE782F4B9B1B00D73BDE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7AE372F4B9B1A00D73BDE /* ViewController.swift */; };
+		85B7AE792F4B9B1B00D73BDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE382F4B9B1B00D73BDE /* Assets.xcassets */; };
+		85B7AE7A2F4B9B1B00D73BDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE382F4B9B1B00D73BDE /* Assets.xcassets */; };
+		85B7AE7B2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7AE3A2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift */; };
+		85B7AE7C2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B7AE3A2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift */; };
+		85B7AE9B2F4B9B1B00D73BDE /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE8E2F4B9B1B00D73BDE /* popup.js */; };
+		85B7AE9C2F4B9B1B00D73BDE /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE8F2F4B9B1B00D73BDE /* background.js */; };
+		85B7AE9D2F4B9B1B00D73BDE /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE902F4B9B1B00D73BDE /* popup.html */; };
+		85B7AE9E2F4B9B1B00D73BDE /* options.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE912F4B9B1B00D73BDE /* options.js */; };
+		85B7AE9F2F4B9B1B00D73BDE /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE922F4B9B1B00D73BDE /* tests */; };
+		85B7AEA12F4B9B1B00D73BDE /* miniflux-read-marker.xpi in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE942F4B9B1B00D73BDE /* miniflux-read-marker.xpi */; };
+		85B7AEA22F4B9B1B00D73BDE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE952F4B9B1B00D73BDE /* README.md */; };
+		85B7AEA32F4B9B1B00D73BDE /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE962F4B9B1B00D73BDE /* icons */; };
+		85B7AEA42F4B9B1B00D73BDE /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE972F4B9B1B00D73BDE /* manifest.json */; };
+		85B7AEA52F4B9B1B00D73BDE /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE982F4B9B1B00D73BDE /* options.html */; };
+		85B7AEA62F4B9B1B00D73BDE /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE992F4B9B1B00D73BDE /* popup.css */; };
+		85B7AEA72F4B9B1B00D73BDE /* options.css in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE9A2F4B9B1B00D73BDE /* options.css */; };
+		85B7AEA82F4B9B1B00D73BDE /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE8E2F4B9B1B00D73BDE /* popup.js */; };
+		85B7AEA92F4B9B1B00D73BDE /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE8F2F4B9B1B00D73BDE /* background.js */; };
+		85B7AEAA2F4B9B1B00D73BDE /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE902F4B9B1B00D73BDE /* popup.html */; };
+		85B7AEAB2F4B9B1B00D73BDE /* options.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE912F4B9B1B00D73BDE /* options.js */; };
+		85B7AEAC2F4B9B1B00D73BDE /* tests in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE922F4B9B1B00D73BDE /* tests */; };
+		85B7AEAE2F4B9B1B00D73BDE /* miniflux-read-marker.xpi in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE942F4B9B1B00D73BDE /* miniflux-read-marker.xpi */; };
+		85B7AEAF2F4B9B1B00D73BDE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE952F4B9B1B00D73BDE /* README.md */; };
+		85B7AEB02F4B9B1B00D73BDE /* icons in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE962F4B9B1B00D73BDE /* icons */; };
+		85B7AEB12F4B9B1B00D73BDE /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE972F4B9B1B00D73BDE /* manifest.json */; };
+		85B7AEB22F4B9B1B00D73BDE /* options.html in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE982F4B9B1B00D73BDE /* options.html */; };
+		85B7AEB32F4B9B1B00D73BDE /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE992F4B9B1B00D73BDE /* popup.css */; };
+		85B7AEB42F4B9B1B00D73BDE /* options.css in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AE9A2F4B9B1B00D73BDE /* options.css */; };
+		85B7AEB62F4B9B1B00D73BDE /* toast.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AEB52F4B9B1B00D73BDE /* toast.js */; };
+		85B7AEB72F4B9B1B00D73BDE /* toast.js in Resources */ = {isa = PBXBuildFile; fileRef = 85B7AEB52F4B9B1B00D73BDE /* toast.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		85B7AE602F4B9B1B00D73BDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 85B7AE2C2F4B9B1A00D73BDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 85B7AE5D2F4B9B1B00D73BDE;
+			remoteInfo = "Miniflux Read Marker Extension (iOS)";
+		};
+		85B7AE6A2F4B9B1B00D73BDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 85B7AE2C2F4B9B1A00D73BDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 85B7AE672F4B9B1B00D73BDE;
+			remoteInfo = "Miniflux Read Marker Extension (macOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		85B7AE822F4B9B1B00D73BDE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85B7AE5F2F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE892F4B9B1B00D73BDE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				85B7AE692F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		85B7AE332F4B9B1A00D73BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Main.html; sourceTree = "<group>"; };
+		85B7AE372F4B9B1A00D73BDE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		85B7AE382F4B9B1B00D73BDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		85B7AE3A2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		85B7AE3F2F4B9B1B00D73BDE /* Miniflux Read Marker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Miniflux Read Marker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85B7AE422F4B9B1B00D73BDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		85B7AE442F4B9B1B00D73BDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		85B7AE472F4B9B1B00D73BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		85B7AE4A2F4B9B1B00D73BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		85B7AE4C2F4B9B1B00D73BDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85B7AE512F4B9B1B00D73BDE /* Miniflux Read Marker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Miniflux Read Marker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85B7AE532F4B9B1B00D73BDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		85B7AE562F4B9B1B00D73BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		85B7AE582F4B9B1B00D73BDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85B7AE592F4B9B1B00D73BDE /* Miniflux Read Marker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Miniflux Read Marker.entitlements"; sourceTree = "<group>"; };
+		85B7AE5E2F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Miniflux Read Marker Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85B7AE632F4B9B1B00D73BDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85B7AE682F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Miniflux Read Marker Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		85B7AE6D2F4B9B1B00D73BDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85B7AE6E2F4B9B1B00D73BDE /* Miniflux Read Marker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Miniflux Read Marker.entitlements"; sourceTree = "<group>"; };
+		85B7AE8E2F4B9B1B00D73BDE /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.js; path = ../../popup.js; sourceTree = "<group>"; };
+		85B7AE8F2F4B9B1B00D73BDE /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.js; path = ../../background.js; sourceTree = "<group>"; };
+		85B7AE902F4B9B1B00D73BDE /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = ../../popup.html; sourceTree = "<group>"; };
+		85B7AE912F4B9B1B00D73BDE /* options.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = options.js; path = ../../options.js; sourceTree = "<group>"; };
+		85B7AE922F4B9B1B00D73BDE /* tests */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tests; path = ../../tests; sourceTree = "<group>"; };
+		85B7AE942F4B9B1B00D73BDE /* miniflux-read-marker.xpi */ = {isa = PBXFileReference; lastKnownFileType = file; name = "miniflux-read-marker.xpi"; path = "../../miniflux-read-marker.xpi"; sourceTree = "<group>"; };
+		85B7AE952F4B9B1B00D73BDE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
+		85B7AE962F4B9B1B00D73BDE /* icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = icons; path = ../../icons; sourceTree = "<group>"; };
+		85B7AE972F4B9B1B00D73BDE /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../../manifest.json; sourceTree = "<group>"; };
+		85B7AE982F4B9B1B00D73BDE /* options.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = options.html; path = ../../options.html; sourceTree = "<group>"; };
+		85B7AE992F4B9B1B00D73BDE /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = ../../popup.css; sourceTree = "<group>"; };
+		85B7AE9A2F4B9B1B00D73BDE /* options.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = options.css; path = ../../options.css; sourceTree = "<group>"; };
+		85B7AEB52F4B9B1B00D73BDE /* toast.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = toast.js; path = ../../toast.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		85B7AE3C2F4B9B1B00D73BDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE4E2F4B9B1B00D73BDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE5B2F4B9B1B00D73BDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE652F4B9B1B00D73BDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		85B7AE2B2F4B9B1A00D73BDE = {
+			isa = PBXGroup;
+			children = (
+				85B7AE302F4B9B1A00D73BDE /* Shared (App) */,
+				85B7AE392F4B9B1B00D73BDE /* Shared (Extension) */,
+				85B7AE412F4B9B1B00D73BDE /* iOS (App) */,
+				85B7AE522F4B9B1B00D73BDE /* macOS (App) */,
+				85B7AE622F4B9B1B00D73BDE /* iOS (Extension) */,
+				85B7AE6C2F4B9B1B00D73BDE /* macOS (Extension) */,
+				85B7AE402F4B9B1B00D73BDE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		85B7AE302F4B9B1A00D73BDE /* Shared (App) */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE372F4B9B1A00D73BDE /* ViewController.swift */,
+				85B7AE382F4B9B1B00D73BDE /* Assets.xcassets */,
+				85B7AE312F4B9B1A00D73BDE /* Resources */,
+			);
+			path = "Shared (App)";
+			sourceTree = "<group>";
+		};
+		85B7AE312F4B9B1A00D73BDE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE322F4B9B1A00D73BDE /* Main.html */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		85B7AE392F4B9B1B00D73BDE /* Shared (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE8D2F4B9B1B00D73BDE /* Resources */,
+				85B7AE3A2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift */,
+			);
+			path = "Shared (Extension)";
+			sourceTree = "<group>";
+		};
+		85B7AE402F4B9B1B00D73BDE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE3F2F4B9B1B00D73BDE /* Miniflux Read Marker.app */,
+				85B7AE512F4B9B1B00D73BDE /* Miniflux Read Marker.app */,
+				85B7AE5E2F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */,
+				85B7AE682F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		85B7AE412F4B9B1B00D73BDE /* iOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE422F4B9B1B00D73BDE /* AppDelegate.swift */,
+				85B7AE442F4B9B1B00D73BDE /* SceneDelegate.swift */,
+				85B7AE462F4B9B1B00D73BDE /* LaunchScreen.storyboard */,
+				85B7AE492F4B9B1B00D73BDE /* Main.storyboard */,
+				85B7AE4C2F4B9B1B00D73BDE /* Info.plist */,
+			);
+			path = "iOS (App)";
+			sourceTree = "<group>";
+		};
+		85B7AE522F4B9B1B00D73BDE /* macOS (App) */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE532F4B9B1B00D73BDE /* AppDelegate.swift */,
+				85B7AE552F4B9B1B00D73BDE /* Main.storyboard */,
+				85B7AE582F4B9B1B00D73BDE /* Info.plist */,
+				85B7AE592F4B9B1B00D73BDE /* Miniflux Read Marker.entitlements */,
+			);
+			path = "macOS (App)";
+			sourceTree = "<group>";
+		};
+		85B7AE622F4B9B1B00D73BDE /* iOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE632F4B9B1B00D73BDE /* Info.plist */,
+			);
+			path = "iOS (Extension)";
+			sourceTree = "<group>";
+		};
+		85B7AE6C2F4B9B1B00D73BDE /* macOS (Extension) */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE6D2F4B9B1B00D73BDE /* Info.plist */,
+				85B7AE6E2F4B9B1B00D73BDE /* Miniflux Read Marker.entitlements */,
+			);
+			path = "macOS (Extension)";
+			sourceTree = "<group>";
+		};
+		85B7AE8D2F4B9B1B00D73BDE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				85B7AE8E2F4B9B1B00D73BDE /* popup.js */,
+				85B7AE8F2F4B9B1B00D73BDE /* background.js */,
+				85B7AE902F4B9B1B00D73BDE /* popup.html */,
+				85B7AE912F4B9B1B00D73BDE /* options.js */,
+				85B7AE922F4B9B1B00D73BDE /* tests */,
+				85B7AE942F4B9B1B00D73BDE /* miniflux-read-marker.xpi */,
+				85B7AE952F4B9B1B00D73BDE /* README.md */,
+				85B7AE962F4B9B1B00D73BDE /* icons */,
+				85B7AE972F4B9B1B00D73BDE /* manifest.json */,
+				85B7AEB52F4B9B1B00D73BDE /* toast.js */,
+				85B7AE982F4B9B1B00D73BDE /* options.html */,
+				85B7AE992F4B9B1B00D73BDE /* popup.css */,
+				85B7AE9A2F4B9B1B00D73BDE /* options.css */,
+			);
+			name = Resources;
+			path = "Shared (Extension)";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		85B7AE3E2F4B9B1B00D73BDE /* Miniflux Read Marker (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85B7AE832F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker (iOS)" */;
+			buildPhases = (
+				85B7AE3B2F4B9B1B00D73BDE /* Sources */,
+				85B7AE3C2F4B9B1B00D73BDE /* Frameworks */,
+				85B7AE3D2F4B9B1B00D73BDE /* Resources */,
+				85B7AE822F4B9B1B00D73BDE /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				85B7AE612F4B9B1B00D73BDE /* PBXTargetDependency */,
+			);
+			name = "Miniflux Read Marker (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Miniflux Read Marker (iOS)";
+			productReference = 85B7AE3F2F4B9B1B00D73BDE /* Miniflux Read Marker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		85B7AE502F4B9B1B00D73BDE /* Miniflux Read Marker (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85B7AE8A2F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker (macOS)" */;
+			buildPhases = (
+				85B7AE4D2F4B9B1B00D73BDE /* Sources */,
+				85B7AE4E2F4B9B1B00D73BDE /* Frameworks */,
+				85B7AE4F2F4B9B1B00D73BDE /* Resources */,
+				85B7AE892F4B9B1B00D73BDE /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				85B7AE6B2F4B9B1B00D73BDE /* PBXTargetDependency */,
+			);
+			name = "Miniflux Read Marker (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Miniflux Read Marker (macOS)";
+			productReference = 85B7AE512F4B9B1B00D73BDE /* Miniflux Read Marker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		85B7AE5D2F4B9B1B00D73BDE /* Miniflux Read Marker Extension (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85B7AE7F2F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker Extension (iOS)" */;
+			buildPhases = (
+				85B7AE5A2F4B9B1B00D73BDE /* Sources */,
+				85B7AE5B2F4B9B1B00D73BDE /* Frameworks */,
+				85B7AE5C2F4B9B1B00D73BDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Miniflux Read Marker Extension (iOS)";
+			packageProductDependencies = (
+			);
+			productName = "Miniflux Read Marker Extension (iOS)";
+			productReference = 85B7AE5E2F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		85B7AE672F4B9B1B00D73BDE /* Miniflux Read Marker Extension (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85B7AE862F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker Extension (macOS)" */;
+			buildPhases = (
+				85B7AE642F4B9B1B00D73BDE /* Sources */,
+				85B7AE652F4B9B1B00D73BDE /* Frameworks */,
+				85B7AE662F4B9B1B00D73BDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Miniflux Read Marker Extension (macOS)";
+			packageProductDependencies = (
+			);
+			productName = "Miniflux Read Marker Extension (macOS)";
+			productReference = 85B7AE682F4B9B1B00D73BDE /* Miniflux Read Marker Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		85B7AE2C2F4B9B1A00D73BDE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					85B7AE3E2F4B9B1B00D73BDE = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					85B7AE502F4B9B1B00D73BDE = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					85B7AE5D2F4B9B1B00D73BDE = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					85B7AE672F4B9B1B00D73BDE = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = 85B7AE2F2F4B9B1A00D73BDE /* Build configuration list for PBXProject "Miniflux Read Marker" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 85B7AE2B2F4B9B1A00D73BDE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 85B7AE402F4B9B1B00D73BDE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				85B7AE3E2F4B9B1B00D73BDE /* Miniflux Read Marker (iOS) */,
+				85B7AE502F4B9B1B00D73BDE /* Miniflux Read Marker (macOS) */,
+				85B7AE5D2F4B9B1B00D73BDE /* Miniflux Read Marker Extension (iOS) */,
+				85B7AE672F4B9B1B00D73BDE /* Miniflux Read Marker Extension (macOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		85B7AE3D2F4B9B1B00D73BDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AE482F4B9B1B00D73BDE /* LaunchScreen.storyboard in Resources */,
+				85B7AE6F2F4B9B1B00D73BDE /* Main.html in Resources */,
+				85B7AE792F4B9B1B00D73BDE /* Assets.xcassets in Resources */,
+				85B7AE4B2F4B9B1B00D73BDE /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE4F2F4B9B1B00D73BDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AE572F4B9B1B00D73BDE /* Main.storyboard in Resources */,
+				85B7AE7A2F4B9B1B00D73BDE /* Assets.xcassets in Resources */,
+				85B7AE702F4B9B1B00D73BDE /* Main.html in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE5C2F4B9B1B00D73BDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AEAE2F4B9B1B00D73BDE /* miniflux-read-marker.xpi in Resources */,
+				85B7AEB12F4B9B1B00D73BDE /* manifest.json in Resources */,
+				85B7AEA92F4B9B1B00D73BDE /* background.js in Resources */,
+				85B7AEB22F4B9B1B00D73BDE /* options.html in Resources */,
+				85B7AEB02F4B9B1B00D73BDE /* icons in Resources */,
+				85B7AEB42F4B9B1B00D73BDE /* options.css in Resources */,
+				85B7AEAB2F4B9B1B00D73BDE /* options.js in Resources */,
+				85B7AEAA2F4B9B1B00D73BDE /* popup.html in Resources */,
+				85B7AEB32F4B9B1B00D73BDE /* popup.css in Resources */,
+				85B7AEAC2F4B9B1B00D73BDE /* tests in Resources */,
+				85B7AEAF2F4B9B1B00D73BDE /* README.md in Resources */,
+				85B7AEA82F4B9B1B00D73BDE /* popup.js in Resources */,
+				85B7AEB62F4B9B1B00D73BDE /* toast.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE662F4B9B1B00D73BDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AEA12F4B9B1B00D73BDE /* miniflux-read-marker.xpi in Resources */,
+				85B7AEA42F4B9B1B00D73BDE /* manifest.json in Resources */,
+				85B7AE9C2F4B9B1B00D73BDE /* background.js in Resources */,
+				85B7AEA52F4B9B1B00D73BDE /* options.html in Resources */,
+				85B7AEA32F4B9B1B00D73BDE /* icons in Resources */,
+				85B7AEA72F4B9B1B00D73BDE /* options.css in Resources */,
+				85B7AE9E2F4B9B1B00D73BDE /* options.js in Resources */,
+				85B7AE9D2F4B9B1B00D73BDE /* popup.html in Resources */,
+				85B7AEA62F4B9B1B00D73BDE /* popup.css in Resources */,
+				85B7AE9F2F4B9B1B00D73BDE /* tests in Resources */,
+				85B7AEA22F4B9B1B00D73BDE /* README.md in Resources */,
+				85B7AE9B2F4B9B1B00D73BDE /* popup.js in Resources */,
+				85B7AEB72F4B9B1B00D73BDE /* toast.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		85B7AE3B2F4B9B1B00D73BDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AE772F4B9B1B00D73BDE /* ViewController.swift in Sources */,
+				85B7AE432F4B9B1B00D73BDE /* AppDelegate.swift in Sources */,
+				85B7AE452F4B9B1B00D73BDE /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE4D2F4B9B1B00D73BDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AE782F4B9B1B00D73BDE /* ViewController.swift in Sources */,
+				85B7AE542F4B9B1B00D73BDE /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE5A2F4B9B1B00D73BDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AE7B2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		85B7AE642F4B9B1B00D73BDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85B7AE7C2F4B9B1B00D73BDE /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		85B7AE612F4B9B1B00D73BDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 85B7AE5D2F4B9B1B00D73BDE /* Miniflux Read Marker Extension (iOS) */;
+			targetProxy = 85B7AE602F4B9B1B00D73BDE /* PBXContainerItemProxy */;
+		};
+		85B7AE6B2F4B9B1B00D73BDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 85B7AE672F4B9B1B00D73BDE /* Miniflux Read Marker Extension (macOS) */;
+			targetProxy = 85B7AE6A2F4B9B1B00D73BDE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		85B7AE322F4B9B1A00D73BDE /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85B7AE332F4B9B1A00D73BDE /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		85B7AE462F4B9B1B00D73BDE /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85B7AE472F4B9B1B00D73BDE /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		85B7AE492F4B9B1B00D73BDE /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85B7AE4A2F4B9B1B00D73BDE /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		85B7AE552F4B9B1B00D73BDE /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				85B7AE562F4B9B1B00D73BDE /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		85B7AE7D2F4B9B1B00D73BDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		85B7AE7E2F4B9B1B00D73BDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		85B7AE802F4B9B1B00D73BDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D7KH5JXN99;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker.Extension";
+				PRODUCT_NAME = "Miniflux Read Marker Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		85B7AE812F4B9B1B00D73BDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D7KH5JXN99;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker.Extension";
+				PRODUCT_NAME = "Miniflux Read Marker Extension";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		85B7AE842F4B9B1B00D73BDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D7KH5JXN99;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker";
+				PRODUCT_NAME = "Miniflux Read Marker";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		85B7AE852F4B9B1B00D73BDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D7KH5JXN99;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker";
+				PRODUCT_NAME = "Miniflux Read Marker";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		85B7AE872F4B9B1B00D73BDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Miniflux Read Marker.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker.Extension";
+				PRODUCT_NAME = "Miniflux Read Marker Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		85B7AE882F4B9B1B00D73BDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/Miniflux Read Marker.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker.Extension";
+				PRODUCT_NAME = "Miniflux Read Marker Extension";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		85B7AE8B2F4B9B1B00D73BDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Miniflux Read Marker.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker";
+				PRODUCT_NAME = "Miniflux Read Marker";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		85B7AE8C2F4B9B1B00D73BDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "macOS (App)/Miniflux Read Marker.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "macOS (App)/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Miniflux Read Marker";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yourCompany.Miniflux-Read-Marker";
+				PRODUCT_NAME = "Miniflux Read Marker";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		85B7AE2F2F4B9B1A00D73BDE /* Build configuration list for PBXProject "Miniflux Read Marker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85B7AE7D2F4B9B1B00D73BDE /* Debug */,
+				85B7AE7E2F4B9B1B00D73BDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85B7AE7F2F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker Extension (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85B7AE802F4B9B1B00D73BDE /* Debug */,
+				85B7AE812F4B9B1B00D73BDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85B7AE832F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85B7AE842F4B9B1B00D73BDE /* Debug */,
+				85B7AE852F4B9B1B00D73BDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85B7AE862F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker Extension (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85B7AE872F4B9B1B00D73BDE /* Debug */,
+				85B7AE882F4B9B1B00D73BDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		85B7AE8A2F4B9B1B00D73BDE /* Build configuration list for PBXNativeTarget "Miniflux Read Marker (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85B7AE8B2F4B9B1B00D73BDE /* Debug */,
+				85B7AE8C2F4B9B1B00D73BDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 85B7AE2C2F4B9B1A00D73BDE /* Project object */;
+}
