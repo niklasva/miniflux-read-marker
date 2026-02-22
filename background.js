@@ -179,6 +179,15 @@ function isBlockedDomain(urlString, blockedDomains) {
   return blockedDomains.includes(host);
 }
 
+function isRootPageUrl(urlString) {
+  try {
+    const url = new URL(urlString);
+    return url.pathname === "/" || url.pathname === "";
+  } catch (err) {
+    return false;
+  }
+}
+
 async function getFeeds(baseUrl, apiToken, debugEnabled) {
   const cached = feedCache.get(baseUrl);
   if (cached && Date.now() < cached.expiresAt) {
@@ -556,6 +565,12 @@ async function checkTab(tabId, url, options = {}) {
 
   if (isBlockedDomain(url, blockedDomains)) {
     logDebug(debugEnabled, "Domain is blocked", url);
+    await resetTabState(tabId);
+    return;
+  }
+
+  if (isRootPageUrl(url)) {
+    logDebug(debugEnabled, "Skipping root page URL", url);
     await resetTabState(tabId);
     return;
   }
