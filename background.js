@@ -512,14 +512,16 @@ async function findEntryInFeedCandidates(normalizedBase, apiToken, url, debugEna
         depth
       );
       if (entry) {
-        return entry;
+        return { entry, hadCandidates: true };
       }
     }
+
+    return { entry: null, hadCandidates: feedIds.length > 0 };
   } catch (err) {
     logDebug(debugEnabled, "Feed lookup failed, falling back to global", err);
   }
 
-  return null;
+  return { entry: null, hadCandidates: false };
 }
 
 async function checkTab(tabId, url, options = {}) {
@@ -595,23 +597,29 @@ async function checkTab(tabId, url, options = {}) {
     }
 
     logDebug(debugEnabled, "Search returned no matches, trying feed-specific lookup");
-    const feedEntry = await findEntryInFeedCandidates(
+    const feedLookup = await findEntryInFeedCandidates(
       normalizedBase,
       apiToken,
       url,
       debugEnabled,
       depth
     );
-    if (feedEntry) {
-      logDebug(debugEnabled, "Found entry in feed", feedEntry);
+    if (feedLookup.entry) {
+      logDebug(debugEnabled, "Found entry in feed", feedLookup.entry);
       await applyMatchedEntryState(
         tabId,
-        feedEntry,
+        feedLookup.entry,
         normalizedBase,
         apiToken,
         autoMarkEnabled,
         debugEnabled
       );
+      return;
+    }
+
+    if (!feedLookup.hadCandidates) {
+      logDebug(debugEnabled, "No matching feed candidates, skipping fallback search");
+      await resetTabState(tabId, url, cacheMissesEnabled);
       return;
     }
 
