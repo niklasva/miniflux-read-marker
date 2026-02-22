@@ -187,6 +187,7 @@ function isRootPageUrl(urlString) {
 async function getFeeds(baseUrl, apiToken, debugEnabled) {
   const cached = feedCache.get(baseUrl);
   if (cached && Date.now() < cached.expiresAt) {
+    logDebug(debugEnabled, "Found cached feeds");
     return cached.feeds;
   }
 
@@ -243,61 +244,11 @@ function setCachedState(url, state) {
   urlCache.set(key, { state, expiresAt: Date.now() + SESSION_CACHE_TTL_MISS_MS });
 }
 
-const SEARCH_LIMIT_GLOBAL = 20;
-const SEARCH_LIMIT_FEED = 50;
-
 function getEntriesPath(feedId) {
   if (typeof feedId === "number") {
     return `/v1/feeds/${feedId}/entries`;
   }
   return "/v1/entries";
-}
-
-function getSearchLimit(feedId) {
-  return typeof feedId === "number" ? SEARCH_LIMIT_FEED : SEARCH_LIMIT_GLOBAL;
-}
-
-async function searchEntriesWithServer(
-  baseUrl,
-  apiToken,
-  feedId,
-  status,
-  pageUrl,
-  debugEnabled
-) {
-  const params = new URLSearchParams({
-    limit: String(getSearchLimit(feedId)),
-    search: pageUrl
-  });
-
-  if (status) {
-    params.set("status", status);
-  }
-
-  const response = await minifluxRequest(
-    baseUrl,
-    apiToken,
-    `${getEntriesPath(feedId)}?${params.toString()}`,
-    {},
-    debugEnabled
-  );
-
-  if (!response.ok) {
-    throw new Error(`Search request failed with status ${response.status}`);
-  }
-
-  const payload = await response.json();
-  if (!payload || !Array.isArray(payload.entries)) return null;
-
-  logDebug(debugEnabled, typeof feedId === "number" ? "Feed search results" : "Search results", {
-    feedId,
-    status,
-    count: payload.entries.length,
-    urls: payload.entries.map((item) => item.url)
-  });
-
-  const entry = payload.entries.find((item) => matchesEntryUrl(item, pageUrl));
-  return entry || null;
 }
 
 async function searchEntriesWithFallback(
@@ -367,38 +318,15 @@ async function searchEntriesWithFallback(
 }
 
 async function findEntry(baseUrl, apiToken, feedId, status, pageUrl, debugEnabled, fallbackDepth) {
-  try {
-    const entry = await searchEntriesWithServer(
-      baseUrl,
-      apiToken,
-      feedId,
-      status,
-      pageUrl,
-      debugEnabled
-    );
-    if (entry) return entry;
-    logDebug(debugEnabled, "Search returned no matches, falling back", { feedId, status });
-    return await searchEntriesWithFallback(
-      baseUrl,
-      apiToken,
-      feedId,
-      status,
-      pageUrl,
-      debugEnabled,
-      fallbackDepth
-    );
-  } catch (err) {
-    logDebug(debugEnabled, "Search failed, falling back", err);
-    return await searchEntriesWithFallback(
-      baseUrl,
-      apiToken,
-      feedId,
-      status,
-      pageUrl,
-      debugEnabled,
-      fallbackDepth
-    );
-  }
+  return await searchEntriesWithFallback(
+    baseUrl,
+    apiToken,
+    feedId,
+    status,
+    pageUrl,
+    debugEnabled,
+    fallbackDepth
+  );
 }
 
 async function setEntryStatus(baseUrl, apiToken, entryId, status, debugEnabled) {
@@ -424,22 +352,17 @@ async function setActionState(tabId, state) {
   if (!actionApi) return;
   if (state === "unread") {
     await actionApi.setIcon({ tabId, path: ACTION_ICONS.unread });
-    await actionApi.setBadgeText({ tabId, text: "●" });
-    await actionApi.setBadgeBackgroundColor({ tabId, color: "#c07a2b" });
     await actionApi.setTitle({ tabId, title: "Miniflux entry unread" });
     return;
   }
 
   if (state === "active") {
     await actionApi.setIcon({ tabId, path: ACTION_ICONS.active });
-    await actionApi.setBadgeText({ tabId, text: "✓" });
-    await actionApi.setBadgeBackgroundColor({ tabId, color: "#2a7a2e" });
     await actionApi.setTitle({ tabId, title: "Miniflux entry found" });
     return;
   }
 
   await actionApi.setIcon({ tabId, path: ACTION_ICONS.default });
-  await actionApi.setBadgeText({ tabId, text: "" });
   await actionApi.setTitle({ tabId, title: "Miniflux Read Marker" });
 }
 
