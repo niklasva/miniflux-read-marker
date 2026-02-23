@@ -16,7 +16,8 @@ const ACTION_ICONS = {
 };
 
 const CHECK_DEBOUNCE_MS = 250;
-const FALLBACK_PAGE_SIZE = 100;
+const FALLBACK_PAGE_SIZE = 25;
+const ENTRY_FIELDS = "id,url,title,status";
 
 const pendingChecks = new Map();
 const tabStates = new Map();
@@ -272,7 +273,8 @@ async function searchEntriesWithFallback(
     const params = new URLSearchParams({
       status,
       limit: String(FALLBACK_PAGE_SIZE),
-      offset: String(offset)
+      offset: String(offset),
+      fields: ENTRY_FIELDS
     });
 
     const response = await minifluxRequest(
